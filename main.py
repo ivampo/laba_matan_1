@@ -19,8 +19,9 @@ def metod_dichotomy(func, a, b, eps):
     return [(a + b) / 2, iterations, dist_iterations]
 
 def grafik(func, a, b, iterations, dist_iterations):
-    x = np.linspace(a, b, (b - a) * 100)
+    x = np.linspace(a, b, int((b - a) * 100))
     y = func(x)
+    plt.subplot(2, 1, 1)
     plt.plot(x, y, label='f(x) = x^3 - 3x^2 + 4', color='blue')
     plt.axhline(0, color='black', linewidth=0.8, linestyle='--')  # Линия x=0
     plt.axvline(0, color='black', linewidth=0.8, linestyle='--')  # Линия y=0
@@ -33,7 +34,8 @@ def grafik(func, a, b, iterations, dist_iterations):
     plt.legend()
     plt.grid()
     plt.savefig('function_plot.png', dpi=300, bbox_inches='tight')
-    plt.clf()
+
+    plt.subplot(2, 1, 2)
     x = list(range(1, len(dist_iterations) + 1))
     y = dist_iterations
     plt.plot(x, y, marker='o', linestyle='-', color='blue', label='Линия через точки')
@@ -42,7 +44,9 @@ def grafik(func, a, b, iterations, dist_iterations):
     plt.ylabel('длина отрезка')
     plt.grid()
     plt.legend()
+    plt.tight_layout()
     plt.savefig('function_plot_dist.png', dpi=300, bbox_inches='tight')
+    plt.show()
 
 def find_all_roots(func, a, b, step=0.1, eps=0.0000000001):
     def find_root(func, a, b, eps):
@@ -66,6 +70,10 @@ def find_all_roots(func, a, b, step=0.1, eps=0.0000000001):
         x = next_x
     return roots
 
-f = lambda x: x**3 - 2*x**2 + 1
-a, b = -0.619, 2
-print(find_all_roots(f, a, b))
+def func(x):
+    return abs(1 / x - 2)
+
+
+a, b = 0.25 , 2
+s = metod_dichotomy(func, a, b, 0.001)
+grafik(func, a, b, s[1], s[2])
